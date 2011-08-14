@@ -25,6 +25,7 @@ namespace Functional\Iterators;
 use InfiniteIterator,
     ArrayIterator,
     Traversable,
+    LimitIterator,
     Functional\Exceptions\InvalidArgumentException;
 
 /**
@@ -39,6 +40,14 @@ class RepetitionIterator extends InfiniteIterator
     {
         InvalidArgumentException::assertCollection($values, __METHOD__, 1);
 
-        parent::__construct($values instanceof Traversable ? $values : new ArrayIterator($values));
+        if (!$values instanceof Traversable) {
+            $values = new ArrayIterator($values);
+        }
+        parent::__construct($values);
+    }
+
+    public function limit($limit, $offset = 0)
+    {
+        return new LimitIterator($this, $offset, $limit);
     }
 }
