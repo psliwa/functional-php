@@ -70,6 +70,8 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Sum.php';
     /** @var Functional\cycle() */
     require_once $basePath . 'Cycle.php';
+    /** @var Functional\repeat() */
+    require_once $basePath . 'Repeat.php';
 
     $iteratorBasePath = $basePath . DIRECTORY_SEPARATOR . 'Iterators' . DIRECTORY_SEPARATOR;
     /** @var Functional\Iterators\RepetitionIterator */
