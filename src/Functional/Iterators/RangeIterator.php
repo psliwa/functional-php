@@ -47,9 +47,15 @@ class RangeIterator implements Iterator
 
     public function __construct($leftBound, $rightBound, $step = 1, $tolerance = 0.0000000001)
     {
-        $this->leftBound = $leftBound;
-        $this->rightBound = $rightBound;
-        $this->step = $step;
+        if (is_float($leftBound) || is_float($rightBound) || is_float($step)) {
+            $this->leftBound = (float)$leftBound;
+            $this->rightBound = (float)$rightBound;
+            $this->step = (float)$step;
+        } else {
+            $this->leftBound = $leftBound;
+            $this->rightBound = $rightBound;
+            $this->step = $step;
+        }
 
         $this->isIncreasing = $rightBound + $step > $rightBound;
         $this->isPositive = $leftBound < $rightBound;

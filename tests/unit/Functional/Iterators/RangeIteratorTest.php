@@ -64,5 +64,10 @@ class RangeIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertSame(1, $iterator->getLeftBound());
         $this->assertSame(10, $iterator->getRightBound());
         $this->assertSame(2, $iterator->getStep());
+
+        $iterator = new RangeIterator(1.0, 10, 2);
+        $this->assertSame(1.0, $iterator->getLeftBound());
+        $this->assertSame(10.0, $iterator->getRightBound());
+        $this->assertSame(2.0, $iterator->getStep());
     }
 }
