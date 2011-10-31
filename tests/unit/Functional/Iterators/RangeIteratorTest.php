@@ -54,20 +54,32 @@ class RangeIteratorTest extends \PHPUnit_Framework_TestCase
 
     function testDefaultToleranceIs0dot000000001()
     {
-        $iterator = new RangeIterator(1, 10, 1);
-        $this->assertSame(0.0000000001, $iterator->getTolerance());
+        $it = new RangeIterator(1, 10, 1.0);
+        $this->assertSame(0.0000000001, $it->getTolerance());
+    }
+
+    function testNoToleranceForIntRanges()
+    {
+        $it = new RangeIterator(1, 10, 2);
+        $this->assertSame(0, $it->getTolerance());
     }
 
     function testAccessors()
     {
-        $iterator = new RangeIterator(1, 10, 2);
-        $this->assertSame(1, $iterator->getLeftBound());
-        $this->assertSame(10, $iterator->getRightBound());
-        $this->assertSame(2, $iterator->getStep());
+        $it = new RangeIterator(1, 10, 2);
+        $this->assertSame(1, $it->getLeftBound());
+        $this->assertSame(10, $it->getRightBound());
+        $this->assertSame(2, $it->getStep());
 
-        $iterator = new RangeIterator(1.0, 10, 2);
-        $this->assertSame(1.0, $iterator->getLeftBound());
-        $this->assertSame(10.0, $iterator->getRightBound());
-        $this->assertSame(2.0, $iterator->getStep());
+        $it = new RangeIterator(1.0, 10, 2);
+        $this->assertSame(1.0, $it->getLeftBound());
+        $this->assertSame(10.0, $it->getRightBound());
+        $this->assertSame(2.0, $it->getStep());
+    }
+
+    function testToleranceIsCastedToFloat()
+    {
+        $it = new RangeIterator(1, 2, 1.0, 1);
+        $this->assertSame(1.0, $it->getTolerance());
     }
 }

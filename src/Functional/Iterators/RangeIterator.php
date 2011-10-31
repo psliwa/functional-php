@@ -51,16 +51,16 @@ class RangeIterator implements Iterator
             $this->leftBound = (float)$leftBound;
             $this->rightBound = (float)$rightBound;
             $this->step = (float)$step;
+            $this->tolerance = (float)$tolerance;
         } else {
             $this->leftBound = $leftBound;
             $this->rightBound = $rightBound;
             $this->step = $step;
+            $this->tolerance = 0;
         }
 
         $this->isIncreasing = $rightBound + $step > $rightBound;
         $this->isPositive = $leftBound < $rightBound;
-
-        $this->tolerance = $tolerance;
     }
 
     public function getLeftBound()
