@@ -56,6 +56,8 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Pluck.php';
     /** @var Functional\product() */
     require_once $basePath . 'Product.php';
+    /** @var Functional\range */
+    require_once $basePath . 'Range.php';
     /** @var Functional\ratio */
     require_once $basePath . 'Ratio.php';
     /** @var Functional\reduce_left() */

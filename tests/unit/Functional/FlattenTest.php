@@ -38,8 +38,8 @@ class FlattenTest extends AbstractTestCase
 
     function test()
     {
-        $this->assertSame(range(1, 15), flatten($this->goodArray));
-        $this->assertSame(range(1, 15), flatten($this->goodIterator));
+        $this->assertSame(\range(1, 15), flatten($this->goodArray));
+        $this->assertSame(\range(1, 15), flatten($this->goodIterator));
         $this->assertSame(array(1, "2", "3", 5), flatten($this->goodArray2));
     }
 
