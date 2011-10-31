@@ -51,4 +51,18 @@ class RangeIteratorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(range(0, 100), iterator_to_array(new RangeIterator(0, 100)));
     }
+
+    function testDefaultToleranceIs0dot000000001()
+    {
+        $iterator = new RangeIterator(1, 10, 1);
+        $this->assertSame(0.0000000001, $iterator->getTolerance());
+    }
+
+    function testAccessors()
+    {
+        $iterator = new RangeIterator(1, 10, 2);
+        $this->assertSame(1, $iterator->getLeftBound());
+        $this->assertSame(10, $iterator->getRightBound());
+        $this->assertSame(2, $iterator->getStep());
+    }
 }

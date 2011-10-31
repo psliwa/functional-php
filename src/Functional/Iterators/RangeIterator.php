@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright (C) 2011 by David Soria Parra <dsp@php.net>
+ * CopyrightBound (C) 2011 by David Soria Parra <dsp@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
+ * in the Software without restriction, including without limitation the rightBounds
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in
+ * The above copyrightBound notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
@@ -25,13 +25,13 @@ namespace Functional\Iterators;
 use Iterator;
 
 /**
- * Iterate over numeric ranges until the right bound is reached
+ * Iterate over numeric ranges until the rightBound bound is reached
  */
 class RangeIterator implements Iterator
 {
-    private $left;
+    private $leftBound;
 
-    private $right;
+    private $rightBound;
 
     private $step;
 
@@ -39,22 +39,42 @@ class RangeIterator implements Iterator
 
     private $position = 0;
 
-    private $tolerance = 0.00000000000001;
+    private $tolerance = 0;
 
     private $isIncreasing;
 
     private $isPositive;
 
-    public function __construct($left, $right, $step = 1, $tolerance = 0.00000000000001)
+    public function __construct($leftBound, $rightBound, $step = 1, $tolerance = 0.0000000001)
     {
-        $this->left = $left;
-        $this->right = $right;
+        $this->leftBound = $leftBound;
+        $this->rightBound = $rightBound;
         $this->step = $step;
 
-        $this->isIncreasing = $right + $step > $right;
-        $this->isPositive = $left < $right;
+        $this->isIncreasing = $rightBound + $step > $rightBound;
+        $this->isPositive = $leftBound < $rightBound;
 
         $this->tolerance = $tolerance;
+    }
+
+    public function getLeftBound()
+    {
+        return $this->leftBound;
+    }
+
+    public function getRightBound()
+    {
+        return $this->rightBound;
+    }
+
+    public function getStep()
+    {
+        return $this->step;
+    }
+
+    public function getTolerance()
+    {
+        return $this->tolerance;
     }
 
     public function current()
@@ -70,7 +90,7 @@ class RangeIterator implements Iterator
     public function rewind()
     {
         $this->position = 0;
-        $this->current = $this->left;
+        $this->current = $this->leftBound;
     }
 
     public function next()
@@ -86,11 +106,11 @@ class RangeIterator implements Iterator
     public function valid()
     {
         if ($this->isIncreasing && $this->isPositive) {
-            return $this->current <= $this->right + $this->tolerance
-                || $this->current <= $this->right - $this->tolerance;
+            return $this->current <= $this->rightBound + $this->tolerance
+                || $this->current <= $this->rightBound - $this->tolerance;
         } else {
-            return $this->current >= $this->right + $this->tolerance
-                || $this->current >= $this->right - $this->tolerance;
+            return $this->current >= $this->rightBound + $this->tolerance
+                || $this->current >= $this->rightBound - $this->tolerance;
         }
     }
 }
