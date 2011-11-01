@@ -22,10 +22,11 @@
  */
 namespace Functional\Iterators;
 
-use Iterator;
+use Iterator,
+    Functional\Exceptions\InvalidArgumentException;
 
 /**
- * Iterate over numeric ranges until the rightBound bound is reached
+ * Iterate over numeric ranges until a upperBound bound is reached
  */
 class RangeIterator implements Iterator
 {
@@ -33,7 +34,9 @@ class RangeIterator implements Iterator
 
     private $rightBound;
 
-    private $step;
+    private $rightBoundWithTolerance;
+
+    private $increment;
 
     private $current;
 
@@ -45,22 +48,52 @@ class RangeIterator implements Iterator
 
     private $isPositive;
 
-    public function __construct($leftBound, $rightBound, $step = 1, $tolerance = 0.0000000001)
+    private $isFloat;
+
+    public function __construct($leftBound, $rightBound, $increment = 1, $tolerance = 0.0000000001)
     {
-        if (is_float($leftBound) || is_float($rightBound) || is_float($step)) {
-            $this->leftBound = (float)$leftBound;
-            $this->rightBound = (float)$rightBound;
-            $this->step = (float)$step;
-            $this->tolerance = (float)$tolerance;
-        } else {
-            $this->leftBound = $leftBound;
-            $this->rightBound = $rightBound;
-            $this->step = $step;
-            $this->tolerance = 0;
+        InvalidArgumentException::assertNumeric($leftBound, __METHOD__, 1);
+        InvalidArgumentException::assertNumeric($rightBound, __METHOD__, 2);
+        InvalidArgumentException::assertNumeric($increment, __METHOD__, 3);
+        InvalidArgumentException::assertNumeric($tolerance, __METHOD__, 4);
+
+        $isIncreasing = $leftBound + $increment > $leftBound;
+        $isPositive = $leftBound < $rightBound;
+
+        if (($isPositive && $increment <= 0) || (!$isPositive && $increment >= 0)) {
+            throw new InvalidArgumentException(
+                sprintf(
+                    'Right bound %s is unreachable by incrementing left bound %s by %s',
+                    $rightBound,
+                    $leftBound,
+                    $increment
+                )
+            );
         }
 
-        $this->isIncreasing = $rightBound + $step > $rightBound;
-        $this->isPositive = $leftBound < $rightBound;
+        $this->isIncreasing = $isIncreasing;
+        $this->isPositive = $isPositive;
+
+        $this->isFloat = is_float($leftBound) || is_float($rightBound) || is_float($increment);
+        $type = $this->isFloat ? 'float' : 'integer';
+        settype($leftBound, $type);
+        settype($rightBound, $type);
+        settype($increment, $type);
+
+        $this->leftBound  = $leftBound;
+        $this->rightBound = $rightBound;
+        $this->increment  = $increment;
+
+        if ($this->isFloat) {
+            settype($tolerance, 'float');
+            $this->tolerance  = $tolerance;
+            $this->rightBoundWithTolerance = array(
+                $this->rightBound + $tolerance,
+                $this->rightBound - $tolerance
+            );
+        } else{
+            $this->rightBoundWithTolerance = array($this->rightBound);
+        }
     }
 
     public function getLeftBound()
@@ -73,9 +106,9 @@ class RangeIterator implements Iterator
         return $this->rightBound;
     }
 
-    public function getStep()
+    public function getIncrement()
     {
-        return $this->step;
+        return $this->increment;
     }
 
     public function getTolerance()
@@ -101,22 +134,25 @@ class RangeIterator implements Iterator
 
     public function next()
     {
-        if (($this->isIncreasing && $this->isPositive) || (!$this->isIncreasing && !$this->isPositive)) {
-            $this->current += $this->step;
+        if ($this->isIncreasing ^ $this->isPositive) {
+            $this->current -= $this->increment;
         } else {
-            $this->current -= $this->step;
+            $this->current += $this->increment;
         }
+
         ++$this->position;
     }
 
     public function valid()
     {
-        if ($this->isIncreasing && $this->isPositive) {
-            return $this->current <= $this->rightBound + $this->tolerance
-                || $this->current <= $this->rightBound - $this->tolerance;
-        } else {
-            return $this->current >= $this->rightBound + $this->tolerance
-                || $this->current >= $this->rightBound - $this->tolerance;
+        foreach ($this->rightBoundWithTolerance as $rightBound) {
+            if (($this->isIncreasing && $this->current <= $rightBound)
+               || (!$this->isIncreasing && $this->current >= $rightBound)) {
+
+                return true;
+            }
         }
+
+        return false;
     }
 }

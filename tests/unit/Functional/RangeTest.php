@@ -34,7 +34,7 @@ class RangeTest extends AbstractTestCase
         $it = range(0, 100, 1);
         $this->assertSame(0, $it->getLeftBound());
         $this->assertSame(100, $it->getRightBound());
-        $this->assertSame(1, $it->getStep());
+        $this->assertSame(1, $it->getIncrement());
     }
 
     function testFloatRange()
@@ -42,7 +42,7 @@ class RangeTest extends AbstractTestCase
         $it = range(0, 1, 0.1);
         $this->assertSame(0.0, $it->getLeftBound());
         $this->assertSame(1.0, $it->getRightBound());
-        $this->assertSame(0.1, $it->getStep());
+        $this->assertSame(0.1, $it->getIncrement());
     }
 
     function testPassingTolerance()
@@ -60,6 +60,6 @@ class RangeTest extends AbstractTestCase
     function testOneIsDefaultStep()
     {
         $it = range(0, 100);
-        $this->assertSame(1, $it->getStep());
+        $this->assertSame(1, $it->getIncrement());
     }
 }

@@ -69,17 +69,80 @@ class RangeIteratorTest extends \PHPUnit_Framework_TestCase
         $it = new RangeIterator(1, 10, 2);
         $this->assertSame(1, $it->getLeftBound());
         $this->assertSame(10, $it->getRightBound());
-        $this->assertSame(2, $it->getStep());
+        $this->assertSame(2, $it->getIncrement());
 
         $it = new RangeIterator(1.0, 10, 2);
         $this->assertSame(1.0, $it->getLeftBound());
         $this->assertSame(10.0, $it->getRightBound());
-        $this->assertSame(2.0, $it->getStep());
+        $this->assertSame(2.0, $it->getIncrement());
     }
 
     function testToleranceIsCastedToFloat()
     {
         $it = new RangeIterator(1, 2, 1.0, 1);
         $this->assertSame(1.0, $it->getTolerance());
+    }
+
+    function testExceptionIsThrownWhenLeftValueIsNotANumber()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Functional\Iterators\RangeIterator::__construct() expects parameter 1 to be numeric (integer, float or numeric string), string given'
+        );
+        new RangeIterator('str', 10);
+    }
+
+    function testExceptionIsThrownWhenRightValueIsNotANumber()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Functional\Iterators\RangeIterator::__construct() expects parameter 2 to be numeric (integer, float or numeric string), string given'
+        );
+        new RangeIterator(10, 'str');
+    }
+
+    function testExceptionIsThrownWhenIncrementValueIsNotANumber()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Functional\Iterators\RangeIterator::__construct() expects parameter 3 to be numeric (integer, float or numeric string), string given'
+        );
+        new RangeIterator(10, 20, 'str');
+    }
+
+    function testExceptionIsThrownWhenRightValueCannotBeReachedByIncrementValue1()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Right bound 5 is unreachable by incrementing left bound 10 by 1'
+        );
+        new RangeIterator(10, 5, 1);
+    }
+
+    function testExceptionIsThrownWhenRightValueCannotBeReachedByIncrementValue2()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Right bound 5 is unreachable by incrementing left bound -10 by -1'
+        );
+        new RangeIterator(-10, 5, -1);
+    }
+
+    function testExceptionIsThrownWhenRightValueCannotBeReachedByIncrementValue3()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Right bound 5 is unreachable by incrementing left bound -10 by 0'
+        );
+        new RangeIterator(-10, 5, 0);
+    }
+
+    function testExceptionIsThrownIfToleranceIsNoNumber()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'Functional\Iterators\RangeIterator::__construct() expects parameter 4 to be numeric (integer, float or numeric string), string given'
+        );
+        new RangeIterator(10, 15, 1, 'str');
     }
 }
