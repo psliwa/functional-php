@@ -59,4 +59,28 @@ class RepeatTest extends AbstractTestCase
             }
         }
     }
+
+    function testPassingIteratorOfKeyedValues()
+    {
+        $n = 0;
+        foreach (repeat(new ArrayIterator(array('one' => 1, 'two' => 2, 'three' => 3))) as $k => $v) {
+            $this->assertContains($k, array('one', 'two', 'three'));
+            $this->assertContains($v, array(1, 2, 3));
+            if (++$n === 100) {
+                break;
+            }
+        }
+    }
+
+    function testPassingArrayOfKeyedValues()
+    {
+        $n = 0;
+        foreach (repeat(array('one' => 1, 'two' => 2, 'three' => 3)) as $k => $v) {
+            $this->assertContains($k, array('one', 'two', 'three'));
+            $this->assertContains($v, array(1, 2, 3));
+            if (++$n === 100) {
+                break;
+            }
+        }
+    }
 }
