@@ -46,14 +46,6 @@ class RepetitionIteratorTest extends \PHPUnit_Framework_TestCase
         $this->assertIteratorRepetition($this->keyIteratorFromArray, array('a', 'b', 'c'), array('A', 'B', 'C'));
     }
 
-    function testLimitingIterator()
-    {
-        $this->assertSame(array('a', 'b', 'c', 'a'), iterator_to_array($this->iteratorFromIterator->limit(4), false));
-        $this->assertSame(array('a', 'b', 'c', 'a'), iterator_to_array($this->iteratorFromArray->limit(4), false));
-        $this->assertSame(array('a', 'b', 'c', 'a'), iterator_to_array($this->keyIteratorFromIterator->limit(4), false));
-        $this->assertSame(array('a', 'b', 'c', 'a'), iterator_to_array($this->keyIteratorFromArray->limit(4), false));
-    }
-
     function testInvalidConstructorArgs()
     {
         $this->setExpectedException(
