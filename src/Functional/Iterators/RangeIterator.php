@@ -34,7 +34,7 @@ class RangeIterator implements Iterator
 
     private $rightBound;
 
-    private $rightBoundWithTolerance;
+    private $rightBoundRange;
 
     private $increment;
 
@@ -60,7 +60,7 @@ class RangeIterator implements Iterator
         $isIncreasing = $leftBound + $increment > $leftBound;
         $isPositive = $leftBound < $rightBound;
 
-        if (($isPositive && $increment <= 0) || (!$isPositive && $increment >= 0)) {
+        if ($isPositive && $increment <= 0 || !$isPositive && $increment >= 0) {
             throw new InvalidArgumentException(
                 sprintf(
                     'Right bound %s is unreachable by incrementing left bound %s by %s',
@@ -87,12 +87,12 @@ class RangeIterator implements Iterator
         if ($this->isFloat) {
             settype($tolerance, 'float');
             $this->tolerance  = $tolerance;
-            $this->rightBoundWithTolerance = array(
+            $this->rightBoundRange = array(
                 $this->rightBound + $tolerance,
                 $this->rightBound - $tolerance
             );
         } else{
-            $this->rightBoundWithTolerance = array($this->rightBound);
+            $this->rightBoundRange = array($this->rightBound);
         }
     }
 
@@ -145,9 +145,9 @@ class RangeIterator implements Iterator
 
     public function valid()
     {
-        foreach ($this->rightBoundWithTolerance as $rightBound) {
-            if (($this->isIncreasing && $this->current <= $rightBound)
-               || (!$this->isIncreasing && $this->current >= $rightBound)) {
+        foreach ($this->rightBoundRange as $rightBound) {
+            if ($this->isIncreasing && $this->current <= $rightBound
+            || !$this->isIncreasing && $this->current >= $rightBound) {
 
                 return true;
             }

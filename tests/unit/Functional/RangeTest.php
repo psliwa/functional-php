@@ -24,11 +24,6 @@ namespace Functional;
 
 class RangeTest extends AbstractTestCase
 {
-    function setUp()
-    {
-        parent::setUp();
-    }
-
     function testIntegerRange()
     {
         $it = range(0, 100, 1);
