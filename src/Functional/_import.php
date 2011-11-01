@@ -42,6 +42,8 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Flatten.php';
     /** @var Functional\group() */
     require_once $basePath . 'Group.php';
+    /** @var Functional\increment() */
+    require_once $basePath . 'Increment.php';
     /** @var Functional\invoke() */
     require_once $basePath . 'Invoke.php';
     /** @var Functional\last() */
