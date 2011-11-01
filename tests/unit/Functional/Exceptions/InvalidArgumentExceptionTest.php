@@ -135,4 +135,34 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
         );
         InvalidArgumentException::assertPositiveInteger('str', 'func', 2);
     }
+
+    function testExceptionIfStringInsteadOfNumber()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'func() expects parameter 2 to be numeric (integer, float or numeric string), string given'
+        );
+        InvalidArgumentException::assertNumeric('str', 'func', 2);
+    }
+
+    function testExceptionIfObjectInsteadOfNumber()
+    {
+        $this->setExpectedException(
+            'Functional\Exceptions\InvalidArgumentException',
+            'func() expects parameter 2 to be numeric (integer, float or numeric string), object given'
+        );
+        InvalidArgumentException::assertNumeric((object)array(), 'func', 2);
+    }
+
+    function testIntegerFloatsAndNumericStringsAreOkWithAssertNumeric()
+    {
+        $this->assertNull(InvalidArgumentException::assertNumeric(1, 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric(-1, 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric(1.0, 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric(-1.0, 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric("1", 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric("-1", 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric("1.0", 'str', 1));
+        $this->assertNull(InvalidArgumentException::assertNumeric("-1.0", 'str', 1));
+    }
 }

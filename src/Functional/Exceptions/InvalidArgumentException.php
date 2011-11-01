@@ -135,18 +135,31 @@ class InvalidArgumentException extends \InvalidArgumentException
     public static function assertValidArrayKey($key, $callee)
     {
         $keyTypes = array('NULL', 'string', 'integer', 'double', 'boolean');
-
         $keyType = gettype($key);
 
         if (!in_array($keyType, $keyTypes, true)) {
             throw new static(
                 sprintf(
-                    '%s(): callback returned invalid array key of type "%s". Expected %4$s or %3$s',
+                    '%1$s(): callback returned invalid array key of type "%2$s". Expected %4$s or %3$s',
                     $callee,
                     $keyType,
                     array_pop($keyTypes),
                     join(', ', $keyTypes)
                 )
+            );
+        }
+    }
+
+    public static function assertNumeric($value, $callee, $parmeterPosition)
+    {
+        if (!is_numeric($value)) {
+            throw new static(
+                    sprintf(
+                        '%s() expects parameter %d to be numeric (integer, float or numeric string), %s given',
+                        $callee,
+                        $parmeterPosition,
+                        gettype($value)
+                    )
             );
         }
     }
