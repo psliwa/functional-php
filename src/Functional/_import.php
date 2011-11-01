@@ -76,8 +76,10 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Repeat.php';
 
     $iteratorBasePath = $basePath . DIRECTORY_SEPARATOR . 'Iterators' . DIRECTORY_SEPARATOR;
-    /** @var Functional\Iterators\RepetitionIterator */
-    require_once $iteratorBasePath . 'RepetitionIterator.php';
+    /** @var Functional\Iterators\LimitIterator */
+    require_once $iteratorBasePath . 'LimitIterator.php';
     /** @var Functional\Iterators\RangeIterator */
     require_once $iteratorBasePath . 'RangeIterator.php';
+    /** @var Functional\Iterators\RepetitionIterator */
+    require_once $iteratorBasePath . 'RepetitionIterator.php';
 }
