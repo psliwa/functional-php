@@ -46,6 +46,8 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Invoke.php';
     /** @var Functional\last() */
     require_once $basePath . 'Last.php';
+    /** @var Functional\limit() */
+    require_once $basePath . 'Limit.php';
     /** @var Functional\map() */
     require_once $basePath . 'Map.php';
     /** @var Functional\none() */

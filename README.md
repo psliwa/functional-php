@@ -220,11 +220,13 @@ $flattened = F\flatten(array(1, 2, 3, array(1, 2, 3, 4), 5));
    Calculates the sum of all elements, starting with `$initial`
  - `integer|float Functional\difference(array|Traversable $collection, $initial = 0)`
    Calculates the difference of all elements, starting with `$initial`
- - `Traversable Functional\cycle(mixed $evenValue, mixed $oddValue)`
+ - `Functional\Iterators\RepetitionIterator Functional\cycle(mixed $evenValue, mixed $oddValue)`
    Returns iterator to cycle between `$evenValue` und `$oddValue`
- - `Traversable Functional\repeat(mixed $value1, [mixed $value2...])`
+ - `Functional\Iterators\RepetitionIterator Functional\repeat(mixed $value1, [mixed $value2...])`
    Returns iterator to repeat the sequence of values passed to the function. When first
    argument is an array or an instance of Traversable the list itself it repeated
+ - `Functional\Iterators\LimitIterator Functional\limit(array|Traversable $collection, int $length[, int $offset])`
+   Limit a collection to a given length with an optional offset
 
 ## Running the test suite
 To run the test suite with the native implementation use `php -c functional.ini $(which phpunit) tests/`
