@@ -49,7 +49,7 @@ class RepetitionIteratorTest extends \PHPUnit_Framework_TestCase
     function testInvalidConstructorArgs()
     {
         $this->setExpectedException(
-            'Exception',
+            'InvalidArgumentException',
             'Functional\Iterators\RepetitionIterator::__construct() expects parameter 1 to be array or instance of Traversable'
         );
         new RepetitionIterator("foo");
