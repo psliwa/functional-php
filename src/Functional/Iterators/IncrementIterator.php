@@ -73,11 +73,6 @@ class IncrementIterator implements Iterator
         $start += $increment - $increment;
         $increment += $start - $start;
 
-        /** Cast all values to a single type */
-        $type = is_float($start) || is_float($increment) ? 'float' : 'integer';
-        settype($start, $type);
-        settype($start, $type);
-
         $this->start     = $start;
         $this->increment = $increment;
     }
