@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,7 @@
 namespace Functional;
 
 /**
- * Drop all elements from a collection until callback returns false or array
- * index is reached
+ * Drop all elements from a collection until callback returns false
  *
  * @param Traversable|array $collection
  * @param callable $callback
@@ -38,17 +37,17 @@ function drop_first($collection, $callback)
     $result = array();
 
     $drop = true;
-    foreach ($collection as $key => $element) {
+    foreach ($collection as $index => $element) {
 
         if ($drop) {
-            if (!call_user_func($callback, $element, $key, $collection)) {
+            if (!call_user_func($callback, $element, $index, $collection)) {
                 $drop = false;
             } else {
                 continue;
             }
         }
 
-        $result[$key] = $element;
+        $result[$index] = $element;
     }
 
     return $result;

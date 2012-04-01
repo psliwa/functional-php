@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,21 +24,24 @@ namespace Functional;
 
 /**
  * Looks through each element in the collection, returning the last one that passes a truthy test (callback).
- * Callback arguments will be element, key, collection
+ * Callback arguments will be element, index, collection
  *
  * @param Traversable|array $collection
  * @param callable $callback
  * @return mixed
  */
-function last($collection, $callback)
+function last($collection, $callback = null)
 {
     Exceptions\InvalidArgumentException::assertCollection($collection, __FUNCTION__, 1);
-    Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
+
+    if ($callback !== null) {
+        Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
+    }
 
     $match = null;
-    foreach ($collection as $key => $element) {
+    foreach ($collection as $index => $element) {
 
-        if (call_user_func($callback, $element, $key, $collection)) {
+        if ($callback === null || call_user_func($callback, $element, $index, $collection)) {
             $match = $element;
         }
 

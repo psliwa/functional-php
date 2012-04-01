@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ class EveryTest extends AbstractTestCase
 
     function testPassNonCallable()
     {
-        $this->expectArgumentError("Functional\every() expects parameter 2 to be a valid callback, function 'undefinedFunction' not found or invalid function name");
+        $this->expectArgumentError("Functional\\every() expects parameter 2 to be a valid callback, function 'undefinedFunction' not found or invalid function name");
         every($this->goodArray, 'undefinedFunction');
     }
 

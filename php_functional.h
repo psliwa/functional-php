@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>, Max Beutel <me@maxbeutel.de>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,7 +21,7 @@
  */
 #ifndef PHP_FUNCTIONAL_H
 #define PHP_FUNCTIONAL_H
-#define FUNCTIONAL_VERSION "0.0.1"
+#define FUNCTIONAL_VERSION "0.7.0-dev"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -58,10 +58,26 @@ PHP_FUNCTION(functional_reject);
 PHP_FUNCTION(functional_select);
 PHP_FUNCTION(functional_partition);
 PHP_FUNCTION(functional_flatten);
+PHP_FUNCTION(functional_average);
 PHP_FUNCTION(functional_sum);
 PHP_FUNCTION(functional_difference);
 PHP_FUNCTION(functional_product);
 PHP_FUNCTION(functional_ratio);
+PHP_FUNCTION(functional_unique);
+PHP_FUNCTION(functional_maximum);
+PHP_FUNCTION(functional_minimum);
+PHP_FUNCTION(functional_first_index_of);
+PHP_FUNCTION(functional_last_index_of);
+PHP_FUNCTION(functional_true);
+PHP_FUNCTION(functional_false);
+PHP_FUNCTION(functional_truthy);
+PHP_FUNCTION(functional_falsy);
+PHP_FUNCTION(functional_contains);
+PHP_FUNCTION(functional_invoke_first);
+PHP_FUNCTION(functional_invoke_last);
+PHP_FUNCTION(functional_zip);
+PHP_FUNCTION(functional_head);
+PHP_FUNCTION(functional_tail);
 
 #ifdef ZTS
 #define FUNCTIONAL(v) TSRMG(functional_globals_id, zend_functional_globals *, v)
@@ -78,5 +94,45 @@ PHP_FUNCTION(functional_ratio);
 #define FALSE 0
 #endif
 
+
+#ifndef ZEND_HANDLE_NUMERIC_EX
+#define ZEND_HANDLE_NUMERIC_EX(key, length, idx, func) do {                 \
+    register const char *tmp = key;                                         \
+                                                                            \
+    if (*tmp == '-') {                                                      \
+        tmp++;                                                              \
+    }                                                                       \
+    if (*tmp >= '0' && *tmp <= '9') { /* possibly a numeric index */        \
+        const char *end = key + length - 1;                                 \
+        ulong idx;                                                          \
+                                                                            \
+        if ((*end != '\0') /* not a null terminated string */               \
+         || (*tmp == '0' && length > 2) /* numbers with leading zeros */    \
+         || (end - tmp > MAX_LENGTH_OF_LONG - 1) /* number too long */      \
+         || (SIZEOF_LONG == 4 &&                                            \
+             end - tmp == MAX_LENGTH_OF_LONG - 1 &&                         \
+             *tmp > '2')) { /* overflow */                                  \
+            break;                                                          \
+        }                                                                   \
+        idx = (*tmp - '0');                                                 \
+        while (++tmp != end && *tmp >= '0' && *tmp <= '9') {                \
+            idx = (idx * 10) + (*tmp - '0');                                \
+        }                                                                   \
+        if (tmp == end) {                                                   \
+            if (*key == '-') {                                              \
+                if (idx-1 > LONG_MAX) { /* overflow */                      \
+                    break;                                                  \
+                }                                                           \
+                idx = (ulong)(-(long)idx);                                  \
+            } else if (idx > LONG_MAX) { /* overflow */                     \
+                break;                                                      \
+            }                                                               \
+            func;                                                           \
+        }                                                                   \
+    }                                                                       \
+} while (0)
+
+
+#endif
 
 #endif

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ namespace Functional;
 
 /**
  * Looks through each element in the list, returning an array of all the elements that pass a truthy test (callback).
- * Opposite is Functional\reject(). Callback arguments will be element, key, collection
+ * Opposite is Functional\reject(). Callback arguments will be element, index, collection
  *
  * @param Traversable|array $collection
  * @param callable $callback
@@ -37,10 +37,10 @@ function select($collection, $callback)
 
     $aggregation = array();
 
-    foreach ($collection as $key => $element) {
+    foreach ($collection as $index => $element) {
 
-        if (call_user_func($callback, $element, $key, $collection)) {
-            $aggregation[$key] = $element;
+        if (call_user_func($callback, $element, $index, $collection)) {
+            $aggregation[$index] = $element;
         }
 
     }

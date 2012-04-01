@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@ namespace Functional;
 
 /**
  * Returns true if all of the elements in the collection pass the callback falsy test. Opposite of Functional\all().
- * Callback arguments will be element, key, collection.
+ * Callback arguments will be element, index, collection.
  *
  * @param Traversable|array $collection
  * @param callable $callback
@@ -35,9 +35,9 @@ function none($collection, $callback)
     Exceptions\InvalidArgumentException::assertCollection($collection, __FUNCTION__, 1);
     Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
 
-    foreach ($collection as $key => $element) {
+    foreach ($collection as $index => $element) {
 
-        if (call_user_func($callback, $element, $key, $collection)) {
+        if (call_user_func($callback, $element, $index, $collection)) {
             return false;
         }
 

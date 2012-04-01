@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,9 @@
  */
 namespace Functional;
 
-use ArrayIterator;
+use ArrayIterator,
+    ArrayObject,
+    SplFixedArray;
 
 class MagicGetThrowException
 {
@@ -80,6 +82,20 @@ class MagicGetException
     }
 }
 
+class PluckCaller
+{
+    protected $property;
+
+    public function call($collection, $property)
+    {
+        $this->property = 'value';
+        $plucked = pluck($collection, $property);
+        if (!isset($this->property)) {
+            throw new \Exception('Property is no longer accessable');
+        }
+        return $plucked;
+    }
+}
 
 class PluckTest extends AbstractTestCase
 {
@@ -89,9 +105,12 @@ class PluckTest extends AbstractTestCase
         $this->propertyExistsEverywhereArray = array((object)array('property' => 1), (object)array('property' => 2));
         $this->propertyExistsEverywhereIterator = new ArrayIterator($this->propertyExistsEverywhereArray);
         $this->propertyExistsSomewhere = array((object)array('property' => 1), (object)array('otherProperty' => 2));
-        $this->propertyMagicGet = array(new MagicGet(array('property' => 1)), new MagicGet(array('property' => 2)));
-        $this->mixedCollection = array((object)array('property' => 1), array('key'  => 'value'));
+        $this->propertyMagicGet = array(new MagicGet(array('property' => 1)), new MagicGet(array('property' => 2)), array('property' => '3'), new ArrayObject(array('property' => 4)));
+        $this->mixedCollection = array((object)array('property' => 1), array('key'  => 'value'), array('property' => 2));
         $this->keyedCollection = array('test' => (object)array('property' => 1), 'test2' => (object)array('property' => 2));
+        $fixedArray = new SplFixedArray(1);
+        $fixedArray[0] = 3;
+        $this->numericArrayCollection = array('one' => array(1), 'two' => array(1 => 2), 'three' => array('idx' => 2), 'four' => new ArrayObject(array(2)), 'five' => $fixedArray);
         $this->issetExceptionArray = array((object)array('property' => 1), new MagicGetException(true, false));
         $this->issetExceptionIterator = new ArrayIterator($this->issetExceptionArray);
         $this->getExceptionArray = array((object)array('property' => 1), new MagicGetException(false, true));
@@ -100,9 +119,9 @@ class PluckTest extends AbstractTestCase
 
     function testPluckPropertyThatExistsEverywhere()
     {
+        $this->assertSame(array(1, 2, '3', 4), pluck($this->propertyMagicGet, 'property'));
         $this->assertSame(array(1, 2), pluck($this->propertyExistsEverywhereArray, 'property'));
         $this->assertSame(array(1, 2), pluck($this->propertyExistsEverywhereIterator, 'property'));
-        $this->assertSame(array(1, 2), pluck($this->propertyMagicGet, 'property'));
     }
 
     function testPluckPropertyThatExistsSomewhere()
@@ -113,7 +132,7 @@ class PluckTest extends AbstractTestCase
 
     function testPluckPropertyFromMixedCollection()
     {
-        $this->assertSame(array(1, null), pluck($this->mixedCollection, 'property'));
+        $this->assertSame(array(1, null, 2), pluck($this->mixedCollection, 'property'));
     }
 
     function testPluckProtectedProperty()
@@ -126,6 +145,16 @@ class PluckTest extends AbstractTestCase
         $this->assertSame(array('test' => 1, 'test2' => 2), pluck($this->keyedCollection, 'property'));
     }
 
+    function testPluckNumericArrayIndex()
+    {
+        $this->assertSame(array('one' => 1, 'two' => null, 'three' => null, 'four' => 2, 'five' => 3), pluck($this->numericArrayCollection, 0));
+        $this->assertSame(array('one' => 1, 'two' => null, 'three' => null, 'four' => 2, 'five' => 3), pluck($this->numericArrayCollection, 0));
+        $this->assertSame(array('one' => 1, 'two' => null, 'three' => null, 'four' => 2, 'five' => 3), pluck(new ArrayIterator($this->numericArrayCollection), 0));
+        $this->assertSame(array(1, null, null, 2, 3), pluck(array_values($this->numericArrayCollection), 0));
+        $this->assertSame(array(1, null, null, 2, 3), pluck(new ArrayIterator(array_values($this->numericArrayCollection)), 0));
+        $this->assertSame(array('one' => 1, 'two' => null, 'three' => null, 'four' => 2, 'five' => 3), pluck($this->numericArrayCollection, '0'));
+    }
+
     function testPassNoCollection()
     {
         $this->expectArgumentError('Functional\pluck() expects parameter 1 to be array or instance of Traversable');
@@ -134,7 +163,7 @@ class PluckTest extends AbstractTestCase
 
     function testPassNoPropertyName()
     {
-        $this->expectArgumentError('Functional\pluck() expects parameter 2 to be string, object given');
+        $this->expectArgumentError('Functional\pluck() expects parameter 2 to be a valid property name or array index, object given');
         pluck($this->propertyExistsSomewhere, new \stdClass());
     }
 
@@ -160,5 +189,11 @@ class PluckTest extends AbstractTestCase
     {
         $this->setExpectedException('DomainException', '__get exception: foobar');
         pluck($this->getExceptionIterator, 'foobar');
+    }
+
+    function testClassCallsPluck()
+    {
+        $caller = new PluckCaller();
+        $this->assertSame(array('test' => 1, 'test2' => 2), $caller->call($this->keyedCollection, 'property'));
     }
 }

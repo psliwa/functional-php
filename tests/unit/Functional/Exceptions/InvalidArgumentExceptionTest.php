@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -105,9 +105,12 @@ class InvalidArgumentExceptionTest extends \PHPUnit_Framework_TestCase
 
     function testExceptionIfInvalidPropertyName()
     {
+        InvalidArgumentException::assertPropertyName('property', 'func', 2);
+        InvalidArgumentException::assertPropertyName(0, 'func', 2);
+        InvalidArgumentException::assertPropertyName(0.2, 'func', 2);
         $this->setExpectedException(
             'Functional\Exceptions\InvalidArgumentException',
-            'func() expects parameter 2 to be string, object given'
+            'func() expects parameter 2 to be a valid property name or array index, object given'
         );
         InvalidArgumentException::assertPropertyName(new \stdClass(), "func", 2);
     }

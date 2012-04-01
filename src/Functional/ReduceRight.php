@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -33,12 +33,12 @@ function reduce_right($collection, $callback, $initial = null)
     Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
 
     $data = array();
-    foreach ($collection as $key => $value) {
-        $data[] = array($key, $value);
+    foreach ($collection as $index => $value) {
+        $data[] = array($index, $value);
     }
 
-    while (list($key, $value) = array_pop($data)) {
-        $initial = call_user_func($callback, $value, $key, $collection, $initial);
+    while (list($index, $value) = array_pop($data)) {
+        $initial = call_user_func($callback, $value, $index, $collection, $initial);
     }
 
     return $initial;

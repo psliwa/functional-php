@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,7 +51,7 @@ class SumTest extends AbstractTestCase
     /** @dataProvider Functional\MathDataProvider::injectErrorCollection */
     function testElementsOfWrongTypeAreIgnored($collection)
     {
-        $this->assertEquals(4.5, sum($collection), '', 0.1);
+        $this->assertEquals(3.5, sum($collection), '', 0.1);
     }
 
     function testPassNoCollection()

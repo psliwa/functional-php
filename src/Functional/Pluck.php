@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,6 +22,8 @@
  */
 namespace Functional;
 
+use ArrayAccess;
+
 /**
  * Extract a property from a collection of objects.
  *
@@ -36,18 +38,17 @@ function pluck($collection, $propertyName)
 
     $aggregation = array();
 
-    foreach ($collection as $key => $element) {
+    foreach ($collection as $index => $element) {
 
         $value = null;
 
-        if (is_object($element)) {
-
-            if (isset($element->{$propertyName})) {
-                $value = $element->{$propertyName};
-            }
+        if (is_object($element) && isset($element->{$propertyName})) {
+            $value = $element->{$propertyName};
+        } elseif ((is_array($element) || $element instanceof ArrayAccess) && isset($element[$propertyName])) {
+            $value = $element[$propertyName];
         }
 
-        $aggregation[$key] = $value;
+        $aggregation[$index] = $value;
     }
 
     return $aggregation;

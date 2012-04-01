@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by David Soria Parra <dsp@php.net>
+ * Copyright (C) 2011 - 2012 by David Soria Parra <dsp@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,8 +26,8 @@ use RecursiveIteratorIterator,
     RecursiveArrayIterator;
 
 /**
- * Takes a nested combination of arrays and returns their contents
- * as a single, flat array. Does not preserve keys.
+ * Takes a nested combination of collections and returns their contents as a single, flat array.
+ * Does not preserve indexs.
  *
  * @param Traversable|array $collection
  * @return array

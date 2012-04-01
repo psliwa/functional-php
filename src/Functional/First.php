@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,20 +25,27 @@ namespace Functional;
 /**
  * Looks through each element in the collection, returning the first one that passes a truthy test (callback). The
  * function returns as soon as it finds an acceptable element, and doesn't traverse the entire collection. Callback
- * arguments will be element, key, collection
+ * arguments will be element, index, collection
  *
  * @param Traversable|array $collection
  * @param callable $callback
  * @return mixed
  */
-function first($collection, $callback)
+function first($collection, $callback = null)
 {
     Exceptions\InvalidArgumentException::assertCollection($collection, __FUNCTION__, 1);
-    Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
 
-    foreach ($collection as $key => $element) {
+    if ($callback !== null) {
+        Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
+    }
 
-        if (call_user_func($callback, $element, $key, $collection)) {
+    foreach ($collection as $index => $element) {
+
+        if ($callback === null) {
+            return $element;
+        }
+
+        if (call_user_func($callback, $element, $index, $collection)) {
             return $element;
         }
 

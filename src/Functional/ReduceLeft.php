@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,8 +32,8 @@ function reduce_left($collection, $callback, $initial = null)
     Exceptions\InvalidArgumentException::assertCollection($collection, __FUNCTION__, 1);
     Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
 
-    foreach ($collection as $key => $value) {
-        $initial = call_user_func($callback, $value, $key, $collection, $initial);
+    foreach ($collection as $index => $value) {
+        $initial = call_user_func($callback, $value, $index, $collection, $initial);
     }
 
     return $initial;

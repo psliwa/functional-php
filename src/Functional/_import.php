@@ -1,6 +1,6 @@
 <?php
-/**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+/*
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,70 +22,54 @@
  */
 if (!extension_loaded('functional')) {
     $basePath = __DIR__ . DIRECTORY_SEPARATOR;
-    /** @var Functional\Exceptions\InvalidArgumentsException */
     require_once $basePath . 'Exceptions/InvalidArgumentException.php';
-    /** @var Functional\every() */
     require_once $basePath . 'Every.php';
-    /** @var Functional\some() */
     require_once $basePath . 'Some.php';
-    /** @var Functional\difference() */
     require_once $basePath . 'Difference.php';
-    /** @var Functional\drop_first */
     require_once $basePath . 'DropFirst.php';
-    /** @var Functional\drop_last */
     require_once $basePath . 'DropLast.php';
-    /** @var Functional\each() */
     require_once $basePath . 'Each.php';
-    /** @var Functional\first() */
     require_once $basePath . 'First.php';
-    /** @var Functional\flatten() */
     require_once $basePath . 'Flatten.php';
-    /** @var Functional\group() */
     require_once $basePath . 'Group.php';
-    /** @var Functional\increment() */
     require_once $basePath . 'Increment.php';
-    /** @var Functional\invoke() */
     require_once $basePath . 'Invoke.php';
-    /** @var Functional\last() */
+    require_once $basePath . 'InvokeFirst.php';
+    require_once $basePath . 'InvokeLast.php';
     require_once $basePath . 'Last.php';
-    /** @var Functional\limit() */
     require_once $basePath . 'Limit.php';
-    /** @var Functional\map() */
+    require_once $basePath . 'Memoize.php';
     require_once $basePath . 'Map.php';
-    /** @var Functional\none() */
+    require_once $basePath . 'Maximum.php';
+    require_once $basePath . 'Minimum.php';
     require_once $basePath . 'None.php';
-    /** @var Functional\partition() */
     require_once $basePath . 'Partition.php';
-    /** @var Functional\pluck() */
     require_once $basePath . 'Pluck.php';
-    /** @var Functional\product() */
     require_once $basePath . 'Product.php';
-    /** @var Functional\range */
     require_once $basePath . 'Range.php';
-    /** @var Functional\ratio */
     require_once $basePath . 'Ratio.php';
-    /** @var Functional\reduce_left() */
+    require_once $basePath . 'Unique.php';
     require_once $basePath . 'ReduceLeft.php';
-    /** @var Functional\reduce_right() */
     require_once $basePath . 'ReduceRight.php';
-    /** @var Functional\reject() */
     require_once $basePath . 'Reject.php';
-    /** @var Functional\select() */
     require_once $basePath . 'Select.php';
-    /** @var Functional\sum() */
     require_once $basePath . 'Sum.php';
-    /** @var Functional\cycle() */
     require_once $basePath . 'Cycle.php';
-    /** @var Functional\repeat() */
     require_once $basePath . 'Repeat.php';
-
+    require_once $basePath . 'Average.php';
+    require_once $basePath . 'FirstIndexOf.php';
+    require_once $basePath . 'LastIndexOf.php';
+    require_once $basePath . 'True.php';
+    require_once $basePath . 'False.php';
+    require_once $basePath . 'Truthy.php';
+    require_once $basePath . 'Falsy.php';
+    require_once $basePath . 'Contains.php';
+    require_once $basePath . 'Zip.php';
+    require_once $basePath . 'Head.php';
+    require_once $basePath . 'Tail.php';
     $iteratorBasePath = $basePath . DIRECTORY_SEPARATOR . 'Iterators' . DIRECTORY_SEPARATOR;
-    /** @var Functional\Iterators\IncrementIterator */
     require_once $iteratorBasePath . 'IncrementIterator.php';
-    /** @var Functional\Iterators\LimitIterator */
     require_once $iteratorBasePath . 'LimitIterator.php';
-    /** @var Functional\Iterators\RangeIterator */
     require_once $iteratorBasePath . 'RangeIterator.php';
-    /** @var Functional\Iterators\RepetitionIterator */
     require_once $iteratorBasePath . 'RepetitionIterator.php';
 }

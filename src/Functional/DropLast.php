@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,28 +23,27 @@
 namespace Functional;
 
 /**
- * Drop all elements from a collection after callback returns true or array
- * index is reached
+ * Drop all elements from a collection after callback returns true
  *
  * @param Traversable|array $collection
- * @param callable|integer $callbackOrIndex
+ * @param callable|integer $callback
  * @return array
  */
-function drop_last($collection, $callbackOrIndex)
+function drop_last($collection, $callback)
 {
     Exceptions\InvalidArgumentException::assertCollection($collection, __FUNCTION__, 1);
-    Exceptions\InvalidArgumentException::assertCallback($callbackOrIndex, __FUNCTION__, 2);
+    Exceptions\InvalidArgumentException::assertCallback($callback, __FUNCTION__, 2);
 
     $result = array();
 
     $drop = false;
-    foreach ($collection as $key => $element) {
+    foreach ($collection as $index => $element) {
 
-        if (!$drop && !call_user_func($callbackOrIndex, $element, $key, $collection)) {
+        if (!$drop && !call_user_func($callback, $element, $index, $collection)) {
             break;
         }
 
-        $result[$key] = $element;
+        $result[$index] = $element;
     }
 
     return $result;

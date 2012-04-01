@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the 'Software'), to deal
@@ -46,6 +46,18 @@ class FirstTest extends AbstractTestCase
         $this->assertSame('second', first($this->iterator, $fn));
         $this->assertNull(first($this->badArray, $fn));
         $this->assertNull(first($this->badIterator, $fn));
+    }
+
+    function testWithoutCallback()
+    {
+        $this->assertSame('first', first($this->array));
+        $this->assertSame('first', first($this->array, null));
+        $this->assertSame('first', first($this->iterator));
+        $this->assertSame('first', first($this->iterator, null));
+        $this->assertSame('foo', first($this->badArray));
+        $this->assertSame('foo', first($this->badArray, null));
+        $this->assertSame('foo', first($this->badIterator));
+        $this->assertSame('foo', first($this->badIterator, null));
     }
 
     function testPassNonCallable()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011 by Lars Strojny <lstrojny@php.net>
+ * Copyright (C) 2011 - 2012 by Lars Strojny <lstrojny@php.net>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,3 +31,9 @@ require_once __DIR__ . '/../../../src/Functional/Exceptions/InvalidArgumentExcep
 require_once __DIR__ . '/AbstractTestCase.php';
 /* @var Functional\MathDataProvider */
 require_once __DIR__ . '/MathDataProvider.php';
+
+if (extension_loaded('functional')) {
+    error_log('NATIVE');
+} else {
+    error_log('USERLAND');
+}
