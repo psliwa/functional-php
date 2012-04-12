@@ -23,10 +23,11 @@
 namespace Functional;
 
 use ReflectionObject;
+use ArrayAccess;
 
 function access($object, $closure, $default = null)
 {
-    if (!is_object($object)) {
+    if (!is_object($object) && !is_array($object)) {
         return null;
     }
 
@@ -44,7 +45,7 @@ function access($object, $closure, $default = null)
     }
 }
 
-class Accessor
+class Accessor implements ArrayAccess
 {
     public $object;
 
@@ -58,8 +59,42 @@ class Accessor
         }
     }
 
+    public function offsetExists($offset)
+    {
+        if (!is_array($this->object) && !$this->reflected->implementsInterface('ArrayAccess')) {
+            throw new Exceptions\AccessException('Array access to non array-like structure');
+        }
+
+        return isset($this->object[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        if (!is_array($this->object) && !$this->reflected->implementsInterface('ArrayAccess')) {
+            throw new Exceptions\AccessException('Array access to non array-like structure');
+        }
+
+        if (!$this->offsetExists($offset)) {
+            throw new Exceptions\AccessException('Array access to non array-like structure');
+        }
+
+        return new static($this->object[$offset]);
+    }
+
+    public function offsetSet($offset, $value)
+    {
+    }
+
+    public function offsetUnset($offset)
+    {
+    }
+
     public function __call($method, $arguments)
     {
+        if (!$this->reflected instanceof ReflectionObject) {
+            throw new Exceptions\AccessException('Not an object');
+        }
+
         if ($this->reflected->hasMethod($method)) {
             if (!$this->reflected->getMethod($method)->isPublic()) {
                 throw new Exceptions\AccessException(
@@ -77,6 +112,10 @@ class Accessor
 
     public function __get($property)
     {
+        if (!$this->reflected instanceof ReflectionObject) {
+            throw new Exceptions\AccessException('Not an object');
+        }
+
         if ($this->reflected->hasProperty($property)) {
             if (!$this->reflected->getProperty($property)->isPublic()) {
                 throw new Exceptions\AccessException(sprintf('Access of invalid property %s', $property));
@@ -105,6 +144,10 @@ class Accessor
 
     public function __invoke()
     {
+        if (!$this->reflected instanceof ReflectionObject) {
+            throw new Exceptions\AccessException('Not an object');
+        }
+
         if (!$this->reflected->hasMethod('__invoke')) {
             throw new Exceptions\AccessException('Invalid functor access');
         }

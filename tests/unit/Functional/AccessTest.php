@@ -70,6 +70,28 @@ class AccessTest extends AbstractTestCase
             $callable = $object->getThis();
             return $callable();
         }));
+        $this->assertNull(access(new TestClass(), function($object) {
+            return $object();
+        }));
+        $this->assertNull(access(array(), function($object) {
+            return $object();
+        }));
+    }
+
+    public function testTryArrayAccess()
+    {
+        $this->assertNull(access(new TestClass(), function($object) {
+            return $object['array'];
+        }));
+        $this->assertSame('bar', access(array('foo' => 'bar'), function($object) {
+            return $object['foo'];
+        }));
+        $this->assertSame('offset', access(new TestArrayAccess(), function($object) {
+            return $object['offset'];
+        }));
+        $this->assertNull(access(new TestArrayAccess(), function($object) {
+            return $object['nonExisting'];
+        }));
     }
 
     public function testTryAccessingProperties()
@@ -102,6 +124,9 @@ class AccessTest extends AbstractTestCase
             return $object->virtualProperty;
         }));
         $this->assertNull(access(new TestClassWithProtectedIsset(), function($object) {
+            return $object->virtualProperty;
+        }));
+        $this->assertNull(access(array(), function($object) {
             return $object->virtualProperty;
         }));
     }
@@ -172,6 +197,27 @@ class TestClass
     public function getClosure()
     {
         return function() { return 'CLOSURE:' . join(func_get_args(), '/'); };
+    }
+}
+
+class TestArrayAccess extends TestClass implements \ArrayAccess
+{
+    public function offsetExists($offset)
+    {
+        return $offset === 'offset';
+    }
+
+    public function offsetGet($offset)
+    {
+        return 'offset';
+    }
+
+    public function offsetSet($offset, $value)
+    {
+    }
+
+    public function offsetUnset($offset)
+    {
     }
 }
 
