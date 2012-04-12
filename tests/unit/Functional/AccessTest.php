@@ -37,8 +37,38 @@ class AccessTest extends AbstractTestCase
         $this->assertNull(access(new TestClass(), function($object) {
             return $object->undefinedMethod();
         }));
-        $this->assertSame('virtualMethod', access(new TestClassWithCall(), function($object) {
+        $this->assertNull(access(new TestClass(), function($object) {
+            return $object->undefinedMethod()->undefinedMethod();
+        }));
+        $this->assertSame('virtualMethod:', access(new TestClassWithCall(), function($object) {
             return $object->virtualMethod();
+        }));
+        $this->assertSame('virtualMethod:foo/bar', access(new TestClassWithCall(), function($object) {
+            return $object->virtualMethod('foo', 'bar');
+        }));
+    }
+
+    public function testTryInvoke()
+    {
+        $this->assertSame('INVOKED:', access(new TestClass(), function($object) {
+            $callable = $object->getInvocable();
+            return $callable();
+        }));
+        $this->assertSame('INVOKED:foo/bar', access(new TestClass(), function($object) {
+            $callable = $object->getInvocable();
+            return $callable('foo', 'bar');
+        }));
+        $this->assertSame('CLOSURE:', access(new TestClass(), function($object) {
+            $callable = $object->getClosure();
+            return $callable();
+        }));
+        $this->assertSame('CLOSURE:foo/bar', access(new TestClass(), function($object) {
+            $callable = $object->getClosure();
+            return $callable('foo', 'bar');
+        }));
+        $this->assertNull(access(new TestClass(), function($object) {
+            $callable = $object->getThis();
+            return $callable();
         }));
     }
 
@@ -133,6 +163,24 @@ class TestClass
     {
         return $this;
     }
+
+    public function getInvocable()
+    {
+        return new TestInvocable();
+    }
+
+    public function getClosure()
+    {
+        return function() { return 'CLOSURE:' . join(func_get_args(), '/'); };
+    }
+}
+
+class TestInvocable
+{
+    public function __invoke()
+    {
+        return 'INVOKED:' . join(func_get_args(), '/');
+    }
 }
 
 class TestClassWithGet extends TestClass
@@ -155,7 +203,7 @@ class TestClassWithCall extends TestClass
 {
     public function __call($method, $arguments)
     {
-        return $method;
+        return $method . ':' . join($arguments, '/');
     }
 }
 

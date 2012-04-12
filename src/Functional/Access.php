@@ -102,4 +102,14 @@ class Accessor
 
         return new static($this->object->{$property});
     }
+
+    public function __invoke()
+    {
+        if (!$this->reflected->hasMethod('__invoke')) {
+            throw new Exceptions\AccessException('Invalid functor access');
+        }
+
+        $callable = $this->object;
+        return new static(call_user_func_array($callable, func_get_args()));
+    }
 }
