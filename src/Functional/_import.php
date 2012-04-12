@@ -23,6 +23,8 @@
 if (!extension_loaded('functional')) {
     $basePath = __DIR__ . DIRECTORY_SEPARATOR;
     require_once $basePath . 'Exceptions/InvalidArgumentException.php';
+    require_once $basePath . 'Exceptions/AccessException.php';
+    require_once $basePath . 'Exceptions/AccessViolationException.php';
     require_once $basePath . 'Every.php';
     require_once $basePath . 'Some.php';
     require_once $basePath . 'Difference.php';
@@ -63,4 +65,5 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Zip.php';
     require_once $basePath . 'Head.php';
     require_once $basePath . 'Tail.php';
+    require_once $basePath . 'Access.php';
 }
