@@ -28,6 +28,14 @@ use Functional as F;
 
 class AbstractTestCase extends TestCase
 {
+    protected $array;
+
+    protected $iterator;
+
+    protected $hash;
+
+    protected $hashIterator;
+
     function setUp()
     {
         $functions = func_num_args() > 0

@@ -64,4 +64,5 @@ if (!extension_loaded('functional')) {
     require_once $basePath . 'Zip.php';
     require_once $basePath . 'Head.php';
     require_once $basePath . 'Tail.php';
+    require_once $basePath . 'Reindex.php';
 }
