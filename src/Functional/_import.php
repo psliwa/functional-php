@@ -66,6 +66,8 @@ call_user_func(function() {
         'Functional\\head',
         'Functional\\tail',
         'Functional\\with',
+        'Functional\\AutoPFA\\Autocurry',
+        'Functional\\AutoPFA\\Map',
     );
     static $basePath = __DIR__;
 

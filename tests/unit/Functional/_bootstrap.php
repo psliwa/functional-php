@@ -23,8 +23,8 @@
 error_reporting(-1);
 ini_set('display_errors', 'on');
 
-/** Conditionally includes native implementation */
-require_once __DIR__ . '/../../../src/Functional/_import.php';
+require_once __DIR__.'/../../../vendor/autoload.php';
+
 /* @var Functional\Exceptions\InvalidArgumentException */
 require_once __DIR__ . '/../../../src/Functional/Exceptions/InvalidArgumentException.php';
 /* @var Functional\AbstractTestCase */
